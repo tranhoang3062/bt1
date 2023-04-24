@@ -1,39 +1,95 @@
-import { Controller, Get, Post, Put, Delete, Param, Query, Body } from '@nestjs/common';
+import { 
+    Controller, 
+    Get, 
+    Post, 
+    Put, 
+    Delete, 
+    Param, 
+    Body,
+    HttpCode,
+    HttpStatus,
+    Res,
+} from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+import { Response } from 'src/common/Response';
 import { ProductService } from './product.service';
-import { ProductDto } from './product.dto';
-import { create } from 'domain';
+import { CreateProductDto } from './dto/createProduct.dto';
+import { UpdateProductDto } from './dto/updateProduct.dto';
 
 @Controller('product')
 export class ProductController {
     constructor(private proService: ProductService) { }
 
     @Get()
+    @HttpCode(HttpStatus.OK)
+    // @ApiResponse({ status: 200, description: 'Success' })
     async getProducts() {
-        const products = await this.proService.getProducts();
-        return products;
+        try {
+            const response = await this.proService.getProducts();
+            return new Response(HttpStatus.OK, response, 'Successful!');
+        } catch (e) {
+            return new Response(HttpStatus.BAD_REQUEST, {}, e.message);
+        }
     }
 
-    @Get(':productId')
-    async getProduct(@Param('productId') productId) {
-        const product = await this.proService.getProductById(productId);
-        return product;
+    @Get(':id')
+    @HttpCode(HttpStatus.OK)
+    async getProductById(@Param('id') productId) {
+        try {
+            const response = await this.proService.getProductById(productId);
+            return new Response(HttpStatus.OK, response, 'Successful!');
+        } catch (e) {
+            return new Response(HttpStatus.BAD_REQUEST, {}, e.message);
+        }
     }
 
     @Post('create')
-    async addProduct(@Body() createProDto: ProductDto) {
-        const product = await this.proService.addProduct(createProDto);
-        return product;
+    @HttpCode(HttpStatus.OK)
+    async addProduct(@Body() createProDto: CreateProductDto) {
+        try {
+            return new Response(
+                HttpStatus.CREATED, 
+                await this.proService.createProduct(createProDto),
+                'Created successfully!'
+            );
+        } catch (e) {
+            return new Response(HttpStatus.BAD_REQUEST, {}, e.message);
+        }
     }
 
-    @Put('edit/:productId')
-    async updateProduct(@Param('productId') productId, @Body() updateProDto: ProductDto) {
-        const product = await this.proService.updateProduct(productId, updateProDto);
-        return product;
+    @Put('edit/:id')
+    @HttpCode(HttpStatus.OK)
+    async updateProduct(@Param('id') productId: number, @Body() updateProDto: UpdateProductDto) {
+        try {
+            return new Response(
+                HttpStatus.OK,
+                await this.proService.updateProduct(productId, updateProDto),
+                'Update successfully!'
+            );
+        } catch (e) {
+            return new Response(HttpStatus.BAD_REQUEST, {}, e.message);
+        }
     }
 
-    @Delete('delete/:productId')
-    async deleteProduct(@Query() query) {
-        const product = await this.proService.deleteProduct(query.productId);
-        return product;
+    @Delete('delete/:id')
+    async deleteProduct(@Param() param) {
+        try {
+            let message;
+            let product = await this.proService.getProductById(param.id);
+
+            if (!product)
+                message = 'Product does not exist!';
+            else
+                message = 'Delete successfully!';
+
+            await this.proService.deleteProduct(param.id);
+            return new Response(
+                HttpStatus.OK,
+                {},
+                message
+            )
+        } catch (e) {
+            return new Response(HttpStatus.BAD_REQUEST, {}, e.message);
+        }
     }
 }
