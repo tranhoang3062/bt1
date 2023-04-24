@@ -8,7 +8,6 @@ import {
     Body,
     HttpCode,
     HttpStatus,
-    Res,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Response } from 'src/common/Response';

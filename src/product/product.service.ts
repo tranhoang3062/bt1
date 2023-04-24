@@ -13,7 +13,11 @@ export class ProductService {
 
     async getProducts(): Promise<Product[]> {
         
-        return await this.proRepo.find();
+        return await this.proRepo.find({
+            order: {
+                id: 'ASC'
+            }
+        });
 
         // const conditions: any = { };
         // conditions.status = Equal(1);
