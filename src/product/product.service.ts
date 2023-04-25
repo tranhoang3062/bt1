@@ -11,12 +11,14 @@ export class ProductService {
         private proRepo: Repository<Product>,
     ) { }
 
-    async getProducts(): Promise<Product[]> {
+    async getProducts(filter: any, paging: any, req: any) {
         
-        return await this.proRepo.find({
+        return await this.proRepo.findAndCount({
             order: {
                 id: 'ASC'
-            }
+            },
+            take: paging.page_size,
+            skip: ((paging.page - 1) * paging.page_size),
         });
 
         // const conditions: any = { };
