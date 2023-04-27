@@ -3,7 +3,7 @@ import { ProductModule } from './product/product.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database/database.module';
-import { DataSource } from 'typeorm';
+import { CategoryModule } from './categories/category.module';
 
 @Module({
     imports: [
@@ -19,13 +19,12 @@ import { DataSource } from 'typeorm';
             }),
         }),
         ProductModule,
-        DatabaseModule
+        DatabaseModule,
+        CategoryModule
     ],
     controllers: [],
     providers: [],
 })
 export class AppModule { 
-    constructor(
-        private dataSource: DataSource,
-    ) { }
+
 }

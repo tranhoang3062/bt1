@@ -1,7 +1,7 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { Equal, Repository } from 'typeorm';
+import { Repository, Raw } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -13,22 +13,19 @@ export class ProductService {
 
     async getProducts(filter: any, paging: any, req: any) {
         
+        let conditions = await this.buildConditions(filter);
+
         return await this.proRepo.findAndCount({
+            where: conditions,
             order: {
                 id: 'ASC'
             },
             take: paging.page_size,
             skip: ((paging.page - 1) * paging.page_size),
         });
-
-        // const conditions: any = { };
-        // conditions.status = Equal(1);
-        // return this.proRepo.findAndCount({
-        //     where: conditions,
-        // });
     }
 
-    async getProductById(productId: number): Promise<Product | null> {
+    async getProductById(productId: number): Promise<Product> {
         // return await this.proRepo.find({
         //     where: { id: productId }
         // });
@@ -48,6 +45,7 @@ export class ProductService {
             name: updateProduct.name,
             description: updateProduct.description,
             price: updateProduct.price,
+            category_id: updateProduct.category_id
         }
 
         await this.proRepo.update(productId, dataUpdate);
@@ -56,5 +54,17 @@ export class ProductService {
 
     async deleteProduct(productId: number): Promise<void> {
         await this.proRepo.delete(productId);
+    }
+
+    async buildConditions(filter: any)
+    {
+        const conditions: any = {};
+
+        if (filter.id)
+            conditions.id = filter.id;
+        if (filter.name) 
+            conditions.name = Raw(alias => `${alias} ILIKE '%${filter.name}%'`);
+
+        return conditions;
     }
 }   

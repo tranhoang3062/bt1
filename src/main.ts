@@ -10,7 +10,7 @@ async function bootstrap() {
     const PORT = +configService.get<number>("PORT");
 
     const config = new DocumentBuilder()
-        .setTitle('Simple API')
+        .setTitle('API')
         .setVersion('1.0')
         .build()
 

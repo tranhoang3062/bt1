@@ -1,0 +1,99 @@
+openapi: 3.0.0
+paths:
+  /product:
+    get:
+      operationId: ProductController_getProducts
+      parameters: []
+      responses:
+        '200':
+          description: success
+  /product/{id}:
+    get:
+      operationId: ProductController_getProductById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: success
+  /product/create:
+    post:
+      operationId: ProductController_addProduct
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductDto'
+      responses:
+        '200':
+          description: success
+  /product/edit/{id}:
+    put:
+      operationId: ProductController_updateProduct
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductDto'
+      responses:
+        '200':
+          description: success
+  /product/delete/{id}:
+    delete:
+      operationId: ProductController_deleteProduct
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: success
+info:
+  title: API
+  description: ''
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    CreateProductDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+      required:
+        - name
+        - description
+        - price
+    UpdateProductDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+      required:
+        - name
+        - description
+        - price
