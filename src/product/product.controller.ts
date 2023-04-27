@@ -32,12 +32,19 @@ export class ProductController {
 
             const paging = {
                 page: req.query.page || 1,
-                page_size: req.query.page_size || 5,
+                page_size: req.query.page_size || 10,
             }
+        
+            let products: any;
+            
+            if ((filter.priceMin >= 0) && (filter.priceMax > filter.priceMin)) {
+                let ite: any = await this.proService.getProducts(filter, paging, req);
+                ite[0] = ite[0].filter(item => (item.price >= filter.priceMin) && (item.price <= filter.priceMax));
+                products = ite;
+            } else
+                products = await this.proService.getProducts(filter, paging, req);
 
-            let products: any = await this.proService.getProducts(filter, paging, req);
-            let pagingRes = new Paging(paging.page, paging.page_size, products[0]);
-
+            let pagingRes = new Paging(paging.page, paging.page_size, products[1]);
             return new Response(HttpStatus.OK, products[0], 'success', pagingRes);
         } catch (e) {
             console.log('[ Product --- getListProducts ]: ', e.message);
@@ -127,7 +134,9 @@ export class ProductController {
         const filter = {
             id: req.query.id || null,
             name: req.query.name || '',
-            price: req.query.price || '',
+            price: req.query.price || null,
+            priceMin: Number(req.query.priceMin) || 0,
+            priceMax: Number(req.query.priceMax) || 0,
         };
 
         return filter;
