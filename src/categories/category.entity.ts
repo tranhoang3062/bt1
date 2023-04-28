@@ -12,6 +12,6 @@ export class Category {
     @Column()
     image: string | null;
 
-    @OneToMany(() => Product, (product) => product.category)
-    product: Product[];
+    @OneToMany(() => Product, (products) => products.category)
+    products: Product[];
 }

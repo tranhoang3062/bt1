@@ -29,22 +29,14 @@ export class ProductController {
     ) {
         try {
             const filter = await this.buildFilter(req);
-
             const paging = {
                 page: req.query.page || 1,
                 page_size: req.query.page_size || 10,
             }
         
-            let products: any;
-            
-            if ((filter.priceMin >= 0) && (filter.priceMax > filter.priceMin)) {
-                let ite: any = await this.proService.getProducts(filter, paging, req);
-                ite[0] = ite[0].filter(item => (item.price >= filter.priceMin) && (item.price <= filter.priceMax));
-                products = ite;
-            } else
-                products = await this.proService.getProducts(filter, paging, req);
-
+            let products = await this.proService.getProducts(filter, paging, req);
             let pagingRes = new Paging(paging.page, paging.page_size, products[1]);
+
             return new Response(HttpStatus.OK, products[0], 'success', pagingRes);
         } catch (e) {
             console.log('[ Product --- getListProducts ]: ', e.message);

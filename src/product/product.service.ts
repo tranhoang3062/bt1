@@ -1,7 +1,7 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { Repository, Raw } from 'typeorm';
+import { Repository, Raw, MoreThan, LessThan, Equal } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -17,6 +17,9 @@ export class ProductService {
 
         return await this.proRepo.findAndCount({
             where: conditions,
+            relations: {
+                category: true
+            },
             order: {
                 id: 'ASC'
             },
@@ -61,9 +64,16 @@ export class ProductService {
         const conditions: any = {};
 
         if (filter.id)
-            conditions.id = filter.id;
+            conditions.id = Equal(filter.id);
+
         if (filter.name) 
             conditions.name = Raw(alias => `${alias} ILIKE '%${filter.name}%'`);
+
+        if(filter.priceMin)
+            conditions.price = MoreThan(filter.priceMin);
+
+        if(filter.priceMax)
+            conditions.price = LessThan(filter.priceMax);
 
         return conditions;
     }
