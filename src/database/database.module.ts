@@ -16,7 +16,11 @@ import { join } from 'path';
                 username: configService.get('POSTGRES_USER'),
                 password: configService.get('POSTGRES_PASSWORD'),
                 database: configService.get('POSTGRES_DB'),
-                entities: [join(__dirname, '**', '*.entity.{ts,js}')],    
+                entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+                migrations: [
+                    "src/migrations/*.ts",
+                    "dist/migrations/*{.ts,.js}"
+                ],
                 synchronize: true,
                 autoLoadEntities: true,
             })

@@ -11,8 +11,8 @@ import {
     Request,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { Response } from 'src/common/Response';
-import { Paging } from 'src/common/Paging';
+import { Response } from '../common/Response';
+import { Paging } from '../common/Paging';
 import { CategoryService } from './category.service';
 import CreateCategoryDto from './dto/createCategory.dto';
 

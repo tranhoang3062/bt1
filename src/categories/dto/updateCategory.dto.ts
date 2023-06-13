@@ -10,7 +10,15 @@ export class UpdateCategoryDto {
 
     @IsString()
     @ApiProperty()
-    image: string;
+    description: string;
+
+    @IsString()
+    @ApiProperty()
+    avatar: string;
+
+    @IsNotEmpty()
+    @ApiProperty()
+    status: number;
 
 }
 

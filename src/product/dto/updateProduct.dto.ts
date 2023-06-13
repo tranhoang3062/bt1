@@ -9,18 +9,23 @@ export class UpdateProductDto {
     name: string;
 
     @IsString()
-    @IsNotEmpty()
     @ApiProperty()
     description: string;
+
+    @IsString()
+    @ApiProperty()
+    avatar: string;
 
     @IsNotEmpty()
     @ApiProperty()
     price: number;
 
-    @IsOptional()
+    @IsNotEmpty()
+    @ApiProperty()
+    hot: number;
+
     @ApiProperty()
     category_id: number;
-
 }
 
 export default UpdateProductDto;

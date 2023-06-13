@@ -4,6 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database/database.module';
 import { CategoryModule } from './categories/category.module';
+import { UserModule } from './user/user.module';
+import { OrderModule } from './order/order.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -20,7 +23,10 @@ import { CategoryModule } from './categories/category.module';
         }),
         ProductModule,
         DatabaseModule,
-        CategoryModule
+        CategoryModule,
+        UserModule,
+        OrderModule,
+        AuthModule,
     ],
     controllers: [],
     providers: [],

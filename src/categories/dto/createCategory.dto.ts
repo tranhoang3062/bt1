@@ -9,9 +9,17 @@ export class CreateCategoryDto {
     name: string;
 
     @IsString()
+    @ApiProperty()
+    description: string;
+
+    @IsString()
+    @ApiProperty()
+    avatar: string;
+
     @IsNotEmpty()
     @ApiProperty()
-    image: string;
+    status: number;
+
 }
 
 export default CreateCategoryDto;
