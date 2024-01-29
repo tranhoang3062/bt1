@@ -26,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
         CategoryModule,
         UserModule,
         OrderModule,
-        AuthModule,
+        // AuthModule,
     ],
     controllers: [],
     providers: [],
